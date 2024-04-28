@@ -14,6 +14,6 @@ passager_router.get("/:id", getPassagerById);
 passager_router.post("/", createPassager);
 passager_router.delete("/:id", deletePassager);
 passager_router.put("/:id", updatePassager);
-studentRouter.post("/code", checkCode);
+studentRouter.post("/phone", checkCode);
 
 export default passager_router;

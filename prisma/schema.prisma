@@ -88,10 +88,10 @@ model Accounts {
  type_accounts TYPEACCOUNT @default(PASSAGER)
  email String @unique
  clerkId String @unique
- id_passager Int? @unique
- passager Passager? @relation(fields: [id_passager], references: [id_passager])
- id_conducteur Int? @unique
- conducteur Conducteur? @relation(fields: [id_conducteur], references: [id_conducteur])
+  telephone_passager String @unique
+ passager Passager? @relation(fields: [telephone_passager], references: [telephone_passager])
+   telephone_conducteur String @unique
+ conducteur Conducteur? @relation(fields: [telephone_conducteur], references: [telephone_conducteur])
 }
 
 

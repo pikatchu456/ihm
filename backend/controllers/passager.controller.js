@@ -1,4 +1,5 @@
 import db from "../config/db.js";
+import asyncHandler from "express-async-handler";
 
 export const getPassager = async (req, res, next) => {
   try {
@@ -67,25 +68,38 @@ export const deletePassager = async (req, res, next) => {
   }
 };
 
+export const checkCode = asyncHandler(async (req, res, next) => {
+  const { phone } = req.body;
 
- export const checkCode = asyncHandler(async (req, res, next) => {
-  const { code } = req.body;
-
-  const passager = await.db.passager.findUnique({
+  // Recherche dans le modèle Passager
+  const passager = await db.passager.findUnique({
     where: {
-      email_passager: code,
+      telephone_passager: phone,
     },
     include: { account: true },
   });
 
-  if (!passager) {
-    return res.status(404).json({message: "Passager introuvable"});
+  // Recherche dans le modèle Conducteur
+  const conducteur = await db.conducteur.findUnique({
+    where: {
+      telephone_conducteur: phone,
+    },
+    include: { account: true },
+  });
+
+  if (!passager && !conducteur) {
+    return res
+      .status(404)
+      .json({ message: "Passager ou Conducteur introuvable" });
   }
 
-  if(PiStudent.account) {
-    return res.status(400).json({ message: "Passager a déja un compte" })
-  } 
+  if (passager && passager.account) {
+    return res.status(400).json({ message: "Passager a déja un compte" });
+  }
 
-   res.status(200).json({ success: true });
+  if (conducteur && conducteur.account) {
+    return res.status(400).json({ message: "Conducteur a déja un compte" });
+  }
 
- })
+  res.status(200).json({ success: true });
+});
